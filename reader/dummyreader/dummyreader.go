@@ -18,11 +18,11 @@ func NthFibonacciNumber(n int) {
 		fmt.Println(s)
 	}
 
-	for i := 0; i < (n - 2); i++ {
-		t := f + s
-		fmt.Println(t)
-		f, s = s, t
-	}
+	//for i := 0; i < (n - 2); i++ {
+	//	t := f + s
+	//	fmt.Println(t)
+	//	f, s = s, t
+	//}
 }
 `
 

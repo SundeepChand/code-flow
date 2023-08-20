@@ -11,10 +11,10 @@ type NodeType uint8
 
 const (
 	NodeType_Unspecified NodeType = iota
+	NodeType_Terminal
 	NodeType_IO
 	NodeType_Process
 	NodeType_Conditional
-	NodeType_Terminal
 )
 
 type Node struct {
