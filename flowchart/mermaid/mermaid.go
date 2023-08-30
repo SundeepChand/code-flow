@@ -38,6 +38,7 @@ func (m *MermaidFlowChart) generateNameForStmt(stmt ast.Node) string {
 	return "id:" + strconv.Itoa(m.curId)
 }
 
+// fromIfStmt generates the flow-chart nodes by taking an if statement block as input.
 func (m *MermaidFlowChart) fromIfStmt(ifStmt *ast.IfStmt) (startNode *flowchart.Node, prevNodes []*flowchart.Node) {
 	startNode = &flowchart.Node{
 		Name:  m.generateNameForStmt(ifStmt),
@@ -54,6 +55,7 @@ func (m *MermaidFlowChart) fromIfStmt(ifStmt *ast.IfStmt) (startNode *flowchart.
 	})
 	prevNodes = append(prevNodes, subPrevNodes...)
 
+	// If this if statement is the only code block & no else/else-if block exists, return.
 	if ifStmt.Else == nil {
 		prevNodes = append(prevNodes, startNode)
 		return
@@ -73,16 +75,91 @@ func (m *MermaidFlowChart) fromIfStmt(ifStmt *ast.IfStmt) (startNode *flowchart.
 		prevNodes = append(prevNodes, elseIfPrevNodes...)
 		m.sourceTree.Edges = append(m.sourceTree.Edges, &flowchart.Edge{
 			Start: startNode,
-			End: elseIfStartNode,
+			End:   elseIfStartNode,
 			Label: "No",
 		})
 	}
 	return
 }
 
+func (m *MermaidFlowChart) fromForStmt(forStmt *ast.ForStmt) (startNode *flowchart.Node, prevNodes []*flowchart.Node) {
+	// Add a node with the initialisation step if it exists.
+	if forStmt.Init != nil {
+		startNode = &flowchart.Node{
+			Name:  m.generateNameForStmt(forStmt.Init),
+			Type:  flowchart.NodeType_Process,
+			Stmts: []string{strings.Replace(m.convertAstNodeToString(forStmt.Init), "\"", "", -1)},
+		}
+		m.sourceTree.Nodes = append(m.sourceTree.Nodes, startNode)
+	}
+
+	// Add a node for the loop condition.
+	forDecisionNode := &flowchart.Node{
+		Name:  m.generateNameForStmt(forStmt.Cond),
+		Type:  flowchart.NodeType_Conditional,
+		Stmts: []string{strings.Replace(m.convertAstNodeToString(forStmt.Cond), "\"", "", -1)},
+	}
+	m.sourceTree.Nodes = append(m.sourceTree.Nodes, forDecisionNode)
+	if startNode == nil {
+		// Since, startNode is not set in the previous step,
+		// so the forDecisionNode should be the startNode.
+		startNode = forDecisionNode
+	} else {
+		m.sourceTree.Edges = append(m.sourceTree.Edges, &flowchart.Edge{
+			Start: startNode,
+			End:   forDecisionNode,
+		})
+	}
+	prevNodes = []*flowchart.Node{forDecisionNode}
+
+	forBodyStartNode, forBodyEndNodes := m.fromBlockStmt(forStmt.Body)
+	if forBodyStartNode != nil {
+		m.sourceTree.Edges = append(m.sourceTree.Edges, &flowchart.Edge{
+			Start: forDecisionNode,
+			End:   forBodyStartNode,
+			Label: "Yes",
+		})
+	}
+
+	// This keeps track of the node to which all the ending nodes inside the for loop connect to.
+	lastNodeInForLoop := forDecisionNode
+
+	// Add a node with post condition if it exists.
+	if forStmt.Post != nil {
+		postNode := &flowchart.Node{
+			Name:  m.generateNameForStmt(forStmt.Post),
+			Type:  flowchart.NodeType_Process,
+			Stmts: []string{strings.Replace(m.convertAstNodeToString(forStmt.Post), "\"", "", -1)},
+		}
+		m.sourceTree.Nodes = append(m.sourceTree.Nodes, postNode)
+
+		// Since, the post step exists in the for loop, all the previous nodes should connect to this.
+		lastNodeInForLoop = postNode
+
+		m.sourceTree.Edges = append(m.sourceTree.Edges, &flowchart.Edge{
+			Start: postNode,
+			End:   forDecisionNode,
+		})
+	}
+	for _, node := range forBodyEndNodes {
+		m.sourceTree.Edges = append(m.sourceTree.Edges, &flowchart.Edge{
+			Start: node,
+			End:   lastNodeInForLoop,
+		})
+	}
+	return
+}
+
+// fromBlockStmt sets the flow chart data structure by taking a block of
+// code as input and converting each of the statements into a node in the flow chart.
 func (m *MermaidFlowChart) fromBlockStmt(blockStmt *ast.BlockStmt) (startNode *flowchart.Node, prevNodes []*flowchart.Node) {
 	for _, stmt := range blockStmt.List {
+		// curNode keeps track of the flowchart node
+		// generated from the current statement being processed.
 		var curNode *flowchart.Node
+
+		// nextPrev keeps track of all those nodes that will become
+		// prev node in the next iteration.
 		var nextPrev []*flowchart.Node
 
 		switch stmt := stmt.(type) {
@@ -91,7 +168,9 @@ func (m *MermaidFlowChart) fromBlockStmt(blockStmt *ast.BlockStmt) (startNode *f
 			curNode = ifBlockStartNode
 			nextPrev = prevNodesFromIf
 		case *ast.ForStmt:
-			fmt.Println("For stmt", stmt)
+			forLoopStartNode, prevNodesFromFor := m.fromForStmt(stmt)
+			curNode = forLoopStartNode
+			nextPrev = prevNodesFromFor
 		default:
 			curNode = &flowchart.Node{
 				Name:  m.generateNameForStmt(stmt),
