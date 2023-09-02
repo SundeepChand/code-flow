@@ -16,14 +16,22 @@ import (
 type MermaidFlowChart struct {
 	fset       *token.FileSet
 	sourceTree *flowchart.SourceTree
+	tmpl       *template.Template
 	// Keeps track of the id to assign to the current node
 	curId int
 }
 
 func New() *MermaidFlowChart {
+	// Initialise the template
+	tmpl, err := template.New("flowchart").Parse(templateStr)
+	if err != nil {
+		panic(fmt.Errorf("failed to initalise mermaid flow chart. %w", err))
+	}
+
 	return &MermaidFlowChart{
 		fset:       token.NewFileSet(),
 		sourceTree: &flowchart.SourceTree{},
+		tmpl:       tmpl,
 	}
 }
 
@@ -193,7 +201,6 @@ func (m *MermaidFlowChart) fromBlockStmt(blockStmt *ast.BlockStmt) (startNode *f
 		}
 		prevNodes = nextPrev
 	}
-	fmt.Println(startNode, prevNodes)
 	return
 }
 
@@ -237,14 +244,8 @@ func (m *MermaidFlowChart) FromAst(astNode ast.Node) {
 }
 
 func (m *MermaidFlowChart) String() (string, error) {
-	// TODO: Move this to constructor
-	tmpl, err := template.New("flowchart").Parse(templateStr)
-	if err != nil {
-		return "", err
-	}
-
 	buf := new(bytes.Buffer)
-	err = tmpl.Execute(buf, m.sourceTree)
+	err := m.tmpl.Execute(buf, m.sourceTree)
 	return buf.String(), err
 }
 
@@ -258,27 +259,27 @@ flowchart TD
 {{- if eq .Type 1 }}
 	{{ .Name }}(["
 		{{ range .Stmts }}
-		{{ . -}}
+		{{- . -}}
 		{{ end }}
 	"])
 {{ else if eq .Type 2 }}
 	{{ .Name }}[/"
 		{{ range .Stmts }}
-		{{ . -}}
+		{{- . -}}
 		{{ end }}
 	"/]
 {{ else if eq .Type 3 }}
 	{{ .Name }}["
 		{{ range .Stmts }}
-		{{ . -}}
+		{{- . -}}
 		{{ end }}
 	"]
 {{ else if eq .Type 4 }}
 	{{ .Name }}{"
 		{{ range .Stmts }}
-		{{ . -}}
+		{{- . -}}
 		{{ end }}
-	"}	
+	"}
 {{ end -}}
 
 {{ end }}

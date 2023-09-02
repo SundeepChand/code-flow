@@ -1,6 +1,6 @@
 package dummyreader
 
-const simpleProgram = `
+const fibonacciSeries = `
 package main
 
 import "fmt"
@@ -34,5 +34,5 @@ func New() *DummyReader {
 }
 
 func (r *DummyReader) Read() (string, error) {
-	return simpleProgram, nil
+	return fibonacciSeries, nil
 }
