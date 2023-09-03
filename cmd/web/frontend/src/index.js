@@ -27,7 +27,11 @@ window.addEventListener('load', () => {
 
     // Setup the code editor
     const codeEditor = editor.create(document.getElementById('code-editor'), {
-        value: '// Write go code here',
+        value: `// HOW IT WORKS?
+        // Write a go function (with package the name & import statement)
+        // And click on the generate button. This will generate a flow chart of the given program
+        // Currently only if-else and for statements are supported.
+        // Support for other flow control statements (eg. switch, break, continue, etc.) coming soon.`,
         language: 'go',
         autoClosingBrackets: 'always',
         automaticLayout: true,

@@ -1,3 +1,9 @@
+build: build-wasm build-frontend
+	git checkout gh-page
+	git add .
+	git commit -m 'Update build'
+	git push origin gh-page
+
 build-wasm: clean
 	GOARCH=wasm GOOS=js go build -o cmd/web/frontend/public/assets/wasm/main.wasm github.com/SundeepChand/code-flow/cmd/web
 
