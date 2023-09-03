@@ -9,9 +9,32 @@
     <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
     <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
     <script src="wasm_exec.js" type="text/javascript"></script>
+    <style>
+        #load-screen {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10;
+            background-color: #021748;
+        }
+
+        #load-screen img {
+            width: 300px;
+            height: auto;
+            border-radius: 2rem;
+        }
+    </style>
 </head>
 
 <body class="h-[89vh] m-0 p-0 max-h-screen">
+
+    <div id="load-screen">
+        <img src="./assets/images/logo.jpeg" alt="Code Flow">
+    </div>
+
     <nav class="bg-sky-600">
         <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div class="relative flex h-20 items-center justify-between">

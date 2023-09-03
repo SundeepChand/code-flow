@@ -7,8 +7,8 @@
     "dev": "cross-env NODE_ENV=development webpack-dev-server --mode development --open",
     "build": "webpack --mode=production --node-env=production",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:dev": "webpack --mode=development",
-    "build:prod": "webpack --mode=production --node-env=production",
+    "build:dev": "webpack --mode=development && cp -r public/* dist/",
+    "build:prod": "webpack --mode=production --node-env=production && cp -r public/* dist/",
     "watch": "webpack --watch",
     "serve": "webpack serve"
   },

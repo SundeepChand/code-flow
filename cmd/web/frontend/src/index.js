@@ -22,8 +22,11 @@ WebAssembly.instantiateStreaming(fetch("assets/wasm/main.wasm"), go.importObject
 });
 
 window.addEventListener('load', () => {
+    // Hide the load screen
+    document.getElementById('load-screen').style.display = 'none'
+
     // Setup the code editor
-    const codeEditor = editor.create(document.getElementById("code-editor"), {
+    const codeEditor = editor.create(document.getElementById('code-editor'), {
         value: '// Write go code here',
         language: 'go',
         autoClosingBrackets: 'always',
