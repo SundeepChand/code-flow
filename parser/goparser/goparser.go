@@ -4,10 +4,14 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+
+	parserInterface "github.com/SundeepChand/code-flow/parser"
 )
 
 type GoParser struct {
 }
+
+var _ parserInterface.Parser = &GoParser{}
 
 func New() *GoParser {
 	return &GoParser{}

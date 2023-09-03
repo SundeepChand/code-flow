@@ -11,6 +11,7 @@ import (
 
 func genWrapper() js.Func {
 	goParser := goparser.New()
+	flowChart := mermaidflowchart.New()
 
 	generatorFunc := js.FuncOf(func(this js.Value, args []js.Value) any {
 		if len(args) != 1 {
@@ -23,7 +24,7 @@ func genWrapper() js.Func {
 			return errors.Wrap(err, "error in parsing input code").Error()
 		}
 
-		flowChart := mermaidflowchart.New()
+		flowChart.Clear()
 		flowChart.FromAst(parsedCode)
 		flowchartStr, err := flowChart.String()
 		if err != nil {

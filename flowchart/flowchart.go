@@ -3,6 +3,7 @@ package flowchart
 import "go/ast"
 
 type FlowChart interface {
+	Clear()
 	FromAst(astNode ast.Node)
 	String() (string, error)
 }

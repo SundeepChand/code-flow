@@ -21,6 +21,8 @@ type MermaidFlowChart struct {
 	curId int
 }
 
+var _ flowchart.FlowChart = &MermaidFlowChart{}
+
 func New() *MermaidFlowChart {
 	// Initialise the template
 	tmpl, err := template.New("flowchart").Parse(templateStr)
@@ -247,6 +249,10 @@ func (m *MermaidFlowChart) String() (string, error) {
 	buf := new(bytes.Buffer)
 	err := m.tmpl.Execute(buf, m.sourceTree)
 	return buf.String(), err
+}
+
+func (m *MermaidFlowChart) Clear() {
+	m.sourceTree = &flowchart.SourceTree{}
 }
 
 const templateStr = `---

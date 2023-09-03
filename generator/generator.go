@@ -33,6 +33,7 @@ func (g *Generator) Generate() error {
 	if err != nil {
 		return errors.Wrap(err, "error in parsing input code")
 	}
+	g.flowChartImpl.Clear()
 	g.flowChartImpl.FromAst(parsedCode)
 	flowchartStr, err := g.flowChartImpl.String()
 	if err != nil {
