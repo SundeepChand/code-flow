@@ -1,4 +1,6 @@
 build: build-wasm build-frontend
+	git add .
+	git commit -m 'Update wasm build'
 	git checkout gh-page
 	git add .
 	git commit -m 'Update build'

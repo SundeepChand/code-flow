@@ -2,7 +2,7 @@
 
 Visualise a Go program using flow-chart.
 
-![Logo](./cmd/web/frontend/public/assets/images/logo.jpeg)
+<img src="./cmd/web/frontend/public/assets/images/logo.jpeg" alt="Logo" width="350">
 
 ## HOW IT WORKS?
 * Visit the website.
