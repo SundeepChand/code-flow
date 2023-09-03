@@ -41,8 +41,6 @@ window.addEventListener('load', () => {
     // Wire the event listeners
     const btnSubmit = document.getElementById('btn-submit')
 
-    console.log('Web page loaded')
-
     btnSubmit.addEventListener('click', async () => {
         const inputText = codeEditor.getValue()
         const result = generateMermaidCode(inputText)
