@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 5px 5px 0 0;
+    max-width: 100%;
+    padding: 1rem;
+}
+
+@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+    .btn-container {
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        background-color: rgba(169, 186, 255, 0.5);
+    }
+}
+
+.output-section {
+    overflow: scroll;
+}

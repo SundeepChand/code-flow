@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Flow</title>
+
+    <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <script src="wasm_exec.js" type="text/javascript"></script>
+</head>
+
+<body class="h-[89vh] m-0 p-0 max-h-screen">
+    <nav class="bg-sky-600">
+        <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+            <div class="relative flex h-20 items-center justify-between">
+                <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                    <div class="flex flex-shrink-0 items-center">
+                        <img class="h-10 w-auto" src="./assets/images/logo.jpeg" alt="Code Flow">
+                    </div>
+                    <div class="hidden sm:ml-6 sm:block">
+                        <div class="flex space-x-4">
+                            <h1 class="bg-cyan-400 text-white block rounded-md px-3 py-2 text-base font-medium">Code
+                                Flow</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu, show/hide based on menu state. -->
+        <div class="sm:hidden" id="mobile-menu">
+            <div class="space-y-1 px-2 pb-3 pt-2">
+                <h1 class="bg-cyan-400 text-white block rounded-md px-3 py-2 text-base font-medium">Code
+                    Flow</h1>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container flex w-full h-full">
+        <div class="code-section flex-1 w-1/2 bg-blue-900">
+            <div class="code-editor-container h-5/6">
+                <div id="code-editor" class="h-full"></div>
+            </div>
+            <div class="btn-container h-1/6 backdrop-blur-sm bg-white/30 rounded-t-lg flex flex-row-reverse">
+                <button id="btn-submit"
+                    class="p-3 text-white bg-emerald-400 hover:bg-emerald-500 rounded-lg h-fit">Generate</button>
+            </div>
+        </div>
+        <div class="output-section bg-blue-950 flex-1 w-1/2">
+            <pre id="result-display" class="mermaid h-full text-center"></pre>
+        </div>
+    </div>
+    <!-- <pre id="result-display" class="mermaid"></pre> -->
+    <!-- 
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker
+                    .register("service-worker.js")
+                    .then((registration) => {
+                        console.log("Service Worker registered: ", registration);
+                    })
+                    .catch((registrationError) => {
+                        console.error("Service Worker registration failed: ", registrationError);
+                    });
+            });
+        }
+    </script> -->
+</body>
+
+</html>
