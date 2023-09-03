@@ -13,4 +13,7 @@ Visualise a Go program using flow-chart.
 
 ## Todos
 * Add support for remaining flow control statements switch, break, continue, etc.
+* Represent the function parameters as an input block.
+* Figure out the I/O statements.
+* Improve interactivity of the rendered diagram.
 * Document folder structure.
